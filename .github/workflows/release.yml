@@ -1,0 +1,43 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release (must match lib/metanorma/asciichem/version.rb)"
+        required: true
+        type: string
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    # Trusted publishing (OIDC): register the publisher on RubyGems.org
+    # as repository asciichem/metanorma-asciichem + workflow
+    # release.yml, with no environment — so this job must not claim
+    # one.
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Verify version matches input
+        run: |
+          actual=$(ruby -e 'require "./lib/metanorma/asciichem/version"; print Metanorma::Asciichem::VERSION')
+          if [ "$actual" != "${{ inputs.version }}" ]; then
+            echo "Version mismatch: input=${{ inputs.version }}, version.rb=$actual"
+            exit 1
+          fi
+          echo "Releasing $actual"
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+      # Builds and pushes using the GitHub OIDC identity — no API keys.
+      - uses: rubygems/release-gem@v1
+      - name: Summary
+        run: |
+          echo "Released metanorma-asciichem ${{ inputs.version }} to RubyGems"
+          echo "https://rubygems.org/gems/metanorma-asciichem"

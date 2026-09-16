@@ -1,0 +1,20 @@
+require:
+  - rubocop
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.3
+  Exclude:
+    - "pkg/**/*"
+    - "vendor/**/*"
+    - "coverage/**/*"
+
+# The extension rewrites nodes inside Asciidoctor's visitor contract;
+# methods mirror that contract and read top-to-bottom.
+Metrics/MethodLength:
+  Max: 30
+
+Metrics/BlockLength:
+  Exclude:
+    - "spec/**/*"
+    - "*.gemspec"

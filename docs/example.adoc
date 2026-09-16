@@ -1,0 +1,42 @@
+= Aspirin monograph (worked example)
+
+This document exercises metanorma-asciichem end to end: chemistry
+rendered from `[chem]` blocks, an inline formula, and a
+`@cite`-annotated molecule whose PubChem record becomes a
+dataset-type bibitem — anchored by InChIKey, so the `<<BSYNRYMUTXBXSQ-UHFFFAOYSA-N>>`
+cross-reference in the body lands on the emitted entry.
+
+Seed the resolver cache first for an offline, reproducible build:
+
+  asciichem resolve --name aspirin
+
+then set `:asciichem-cache-dir:` to your cache directory (or omit the
+attribute to resolve live).
+
+= Aspirin monograph
+Author
+:asciichem-cache-dir: ~/.cache/asciichem
+
+== Synthesis
+
+Aspirin is synthesised from salicylic acid. The overall hydrolysis
+equilibrium:
+
+[chem]
+----
+2H_2 + O_2 -> 2H_2O
+----
+
+Water, inline: chem:H_2O[], appears on both sides of the mechanism.
+
+== Structure and identity
+
+[chem]
+----
+CC(=O)OC1=CC=CC=C1C(=O)O @cas("50-78-2") @cite("pubchem")
+----
+
+The substance record is <<BSYNRYMUTXBXSQ-UHFFFAOYSA-N>>. Citing a
+second source for the same substance (after registering the opt-in
+adapter) yields a second, distinct entry — one bibitem per
+(substance, source).
