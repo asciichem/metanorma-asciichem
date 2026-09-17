@@ -35,9 +35,15 @@ jobs:
         with:
           ruby-version: "3.4"
           bundler-cache: true
+      # CI never pushes to git (read-only contents). `rake release`
+      # attempts `git push origin main` after publishing unless the
+      # version tag already exists locally — bundler then skips its
+      # git stage entirely (see asciichem-ruby PR 86 for the incident).
+      - name: Pre-create the release tag (skips rake's git stage)
+        run: git tag "v${{ inputs.version }}"
       # Builds and pushes using the GitHub OIDC identity — no API keys.
       - uses: rubygems/release-gem@v1
       - name: Summary
         run: |
-          echo "Released metanorma-asciichem ${{ inputs.version }} to RubyGems"
-          echo "https://rubygems.org/gems/metanorma-asciichem"
+          echo "Released metanorma-plugin-asciichem ${{ inputs.version }} to RubyGems"
+          echo "https://rubygems.org/gems/metanorma-plugin-asciichem"
