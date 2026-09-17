@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+
+- Requires asciichem >= 0.29.2 (relaton-bib `< 3`), enabling
+  co-resolution with current metanorma gems; metanorma-standoc is
+  now a development dependency.
+- End-to-end standoc compile wired into the suite
+  (`standoc_spec.rb`): `[chem]` → `<formula><stem type="MathML">`,
+  dataset bibitems verbatim in `<references normative="false">`,
+  InChIKey anchors.
+- Citation anchors are derived from the emitted bibitem XML (works
+  under both relaton-bib major lines) instead of vendor object APIs.
+
 ## [0.1.0] - 2026-09-16
 
 ### Added

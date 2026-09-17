@@ -103,26 +103,26 @@ A worked example document ships in `docs/example.adoc`.
 
 ## Compatibility
 
-Runtime dependencies are `asciichem`, `asciidoctor`, and `nokogiri`
-— the extension operates at the Asciidoctor AST level and needs no
-Metanorma gem to run.
+Runtime dependencies are `asciichem` (>= 0.29.2), `asciidoctor`, and
+`nokogiri` — the extension operates at the Asciidoctor AST level and
+needs no Metanorma gem to run.
 
-The full metanorma-standoc compile path was validated against
-metanorma-standoc 3.5: `[chem]` → `<formula><stem type="MathML">`,
-and the emitted bibitems land verbatim inside
-`<references normative="false">` via the `formats="metanorma"`
-passthrough. That validation bundle cannot be expressed in this
-gem's own Gemfile today because `asciichem` pins `relaton-bib < 2`
-while current metanorma-standoc requires relaton-bib 2 — a shared
-bundle resolves standoc 3.3.x, which crashes at init. Once asciichem
-allows relaton-bib 2, the end-to-end XML spec will be wired into
-this suite (the gemspec carries a note at the same location).
+The full metanorma-standoc compile is exercised by the suite:
+`spec/metanorma/asciichem/standoc_spec.rb` compiles a document
+through metanorma-standoc (dev dependency) and asserts the semantic
+XML — `[chem]` → `<formula><stem type="MathML">`, bibitems verbatim
+inside `<references normative="false">` via the
+`formats="metanorma"` passthrough, InChIKey anchors. That became
+possible with asciichem 0.29.2, which widened its relaton-bib
+constraint to `< 3` so asciichem and current metanorma gems
+co-resolve in one bundle. Citation anchors read the emitted wire XML,
+so both relaton-bib major lines (1.x and 2.x keyword nestings) work.
 
 ## Development
 
 ```sh
 bundle install
-bundle exec rspec        # 15 examples, network-free
+bundle exec rspec        # 16 examples, network-free
 bundle exec rubocop
 ```
 

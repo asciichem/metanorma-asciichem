@@ -59,7 +59,9 @@ RSpec.describe Metanorma::Asciichem::Citations do
       expect(xml).to include('type="dataset"')
       expect(xml).to include('id="BSYNRYMUTXBXSQ-UHFFFAOYSA-N"')
       expect(xml).to include('PubChem CID 2244')
-      expect(xml).to include('<keyword>inchikey=BSYNRYMUTXBXSQ-UHFFFAOYSA-N</keyword>')
+      # relaton-bib 1 writes <keyword>x</keyword>; 2 nests it in
+      # <vocab> with whitespace — assert the text, either nesting.
+      expect(xml).to match(/<keyword>\s*(<vocab>\s*)?inchikey=BSYNRYMUTXBXSQ-UHFFFAOYSA-N/)
     end
 
     it 'dedupes the same substance cited twice into one entry' do

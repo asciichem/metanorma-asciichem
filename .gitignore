@@ -12,3 +12,4 @@
 /.idea/
 *.gem
 Gemfile.lock
+/.html.err.html

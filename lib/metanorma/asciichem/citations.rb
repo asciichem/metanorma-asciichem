@@ -62,30 +62,33 @@ module Metanorma
       # the compound key dedupes same (source, substance) while the
       # insertion-ordered hash preserves first-mention order.
       def entry(source, bibitem)
-        anchor = anchor_for(bibitem) || fallback_anchor(source, bibitem)
-        { [source, anchor] => [anchor, with_anchor(bibitem, anchor)] }
+        xml = bibitem.to_xml
+        anchor = anchor_for(xml) || fallback_anchor(source, xml)
+        { [source, anchor] => [anchor, with_anchor(xml, anchor)] }
       end
 
       # The InChIKey is the cross-source join key: every bibitem for
       # the same substance carries the same keyword, so two spellings
       # of one substance (CAS RN vs name) collapse onto one anchor.
-      # Keywords are Relaton LocalizedStrings; .content is the text.
-      def anchor_for(bibitem)
-        keyword = bibitem.keyword.find { |k| k.content.start_with?(INCHIKEY_PREFIX) }
-        keyword&.content&.delete_prefix(INCHIKEY_PREFIX)
+      # Anchors read the emitted wire XML, not vendor object APIs:
+      # relaton-bib 1 writes <keyword>inchikey=...</keyword> and
+      # relaton-bib 2 nests it (<keyword><vocab>...</vocab></keyword>)
+      # — one pattern serves both.
+      def anchor_for(xml)
+        xml[/#{INCHIKEY_PREFIX}([A-Za-z0-9-]+)/, 1]
       end
 
-      def fallback_anchor(source, bibitem)
-        docid = bibitem.docidentifier.first
-        slug = docid ? docid.id.to_s.gsub(ANCHOR_SANITIZE, '') : 'substance'
+      def fallback_anchor(source, xml)
+        docid = xml[%r{<docidentifier[^>]*>([^<]+)</docidentifier>}, 1]
+        slug = docid ? docid.gsub(ANCHOR_SANITIZE, '') : 'substance'
         "#{source}-#{slug}"
       end
 
       # Relaton emits <bibitem id="..."> with an id derived from the
       # docidentifier; the anchor (InChIKey) replaces it so document
       # cross-references <<INCHIKEY>> land on the entry.
-      def with_anchor(bibitem, anchor)
-        root = Nokogiri::XML(bibitem.to_xml).root
+      def with_anchor(xml, anchor)
+        root = Nokogiri::XML(xml).root
         root['id'] = anchor
         root.to_xml
       end
