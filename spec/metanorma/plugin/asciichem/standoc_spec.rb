@@ -43,6 +43,8 @@ RSpec.describe 'metanorma-standoc compile', :standoc do
       ----
       CC(=O)OC1=CC=CC=C1C(=O)O @name("aspirin") @cite("pubchem")
       ----
+
+      Inline water: chem:H_2O[] in prose.
     ADOC
 
     xml = Asciidoctor.convert(adoc, backend: :standoc, header_footer: true,
