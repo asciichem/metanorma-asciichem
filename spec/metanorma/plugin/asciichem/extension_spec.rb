@@ -68,7 +68,8 @@ RSpec.describe Metanorma::Plugin::Asciichem::Extension do
     it 'renders the target form into an asciimath inline node' do
       inline = process_inline('H_2O')
 
-      expect(inline.context).to eq(:asciimath)
+      expect(inline.context).to eq(:quoted)
+      expect(inline.type).to eq(:asciimath)
       expect(inline.text).to start_with('<math')
       expect(inline.text).to include('H')
     end
@@ -76,14 +77,16 @@ RSpec.describe Metanorma::Plugin::Asciichem::Extension do
     it 'renders the attribute form (sources with spaces)' do
       inline = process_inline('', 'text' => '2H_2 + O_2 -> 2H_2O')
 
-      expect(inline.context).to eq(:asciimath)
+      expect(inline.context).to eq(:quoted)
+      expect(inline.type).to eq(:asciimath)
       expect(inline.text).to start_with('<math')
     end
 
     it 'falls back to monospaced text on invalid AsciiChem' do
       inline = process_inline('not chemistry')
 
-      expect(inline.context).to eq(:monospaced)
+      expect(inline.context).to eq(:quoted)
+      expect(inline.type).to eq(:monospaced)
       expect(inline.text).to eq('not chemistry')
     end
 

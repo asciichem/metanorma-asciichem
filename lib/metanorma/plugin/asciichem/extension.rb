@@ -110,14 +110,19 @@ module Metanorma
             return empty_inline(parent) if source.nil? || source.empty?
 
             formula = Renderer.parse(source)
-            create_inline(parent, :asciimath, Renderer.mathml(formula))
+            # Context :quoted with type :asciimath is the shape core
+            # stem:[] macros produce; converters dispatch inline_quoted
+            # and type the stem MathML from the <math> content. (A
+            # :asciimath-context node dispatches inline_asciimath,
+            # which metanorma converters do not define.)
+            create_inline(parent, :quoted, Renderer.mathml(formula), type: :asciimath)
           rescue AsciiChem::ParseError => e
             logger.error(message_with_context(
                            "invalid AsciiChem in chem: macro: #{e.message} " \
                            '(rendered verbatim)',
                            source_location: parent.source_location
                          ))
-            create_inline(parent, :monospaced, source)
+            create_inline(parent, :quoted, source, type: :monospaced)
           end
 
           private
