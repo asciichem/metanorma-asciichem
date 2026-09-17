@@ -33,16 +33,13 @@ Gem::Specification.new do |spec|
   end
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'asciichem', '>= 0.29'
+  spec.add_dependency 'asciichem', '>= 0.29.2'
   spec.add_dependency 'asciidoctor', '~> 2.0'
   spec.add_dependency 'nokogiri', '~> 1.16'
 
-  # NOTE: metanorma-standoc is deliberately NOT a dev dependency:
-  # asciichem pins relaton-bib < 2 while current metanorma-standoc
-  # requires relaton-bib 2, so a shared bundle resolves standoc 3.3.x
-  # which crashes at init. The full standoc compile (chem -> <formula>
-  # <stem type="MathML">, bibitem pass-through into <references>) is
-  # validated in a separate bundle; see README "Compatibility". Wire
-  # the end-to-end spec into this suite once asciichem allows
-  # relaton-bib 2 (maintainer decision).
+  # metanorma-standoc lives in the Gemfile dev group: it is the
+  # integration-test backend (spec/metanorma/asciichem/standoc_spec.rb),
+  # not a runtime requirement. asciichem >= 0.29.2 widened its
+  # relaton-bib constraint to < 3, which is what lets the two
+  # co-resolve in one bundle.
 end
