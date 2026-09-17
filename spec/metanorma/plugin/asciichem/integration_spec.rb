@@ -15,7 +15,7 @@ RSpec.describe 'metanorma-asciichem document' do
     require 'tmpdir'
     require 'asciichem/resolver'
 
-    fixture = File.read(File.expand_path('../../fixtures/pubchem-aspirin.json', __dir__))
+    fixture = File.read(File.expand_path('../../../fixtures/pubchem-aspirin.json', __dir__))
     fetcher = Struct.new(:body) do
       def get(_url) = body
     end.new(fixture)

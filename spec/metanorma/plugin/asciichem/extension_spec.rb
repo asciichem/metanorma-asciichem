@@ -2,14 +2,18 @@
 
 require 'spec_helper'
 
-RSpec.describe Metanorma::Asciichem::Extension do
+RSpec.describe Metanorma::Plugin::Asciichem::Extension do
   def load_doc(adoc)
     Asciidoctor.load(adoc, safe: :safe)
   end
 
-  it 'registers the chem inline macro globally on require' do
-    expect(defined?(Asciidoctor::Extensions)).to be_truthy
-    expect(Metanorma::Asciichem::VERSION).to eq('0.1.0')
+  it 'exposes the extension classes for the host to register' do
+    # Plugin contract (lutaml/glossarist pattern): the gem does not
+    # self-register; the host converter does. spec_helper plays the
+    # host, so the registration is active here.
+    expect(Asciidoctor.load('x chem:H_2O[]', safe: :safe).blocks.first)
+      .not_to be_nil
+    expect(Metanorma::Plugin::Asciichem::VERSION).to eq('0.1.0')
   end
 
   describe '[chem] blocks' do
@@ -57,8 +61,8 @@ RSpec.describe Metanorma::Asciichem::Extension do
     # directly (the standoc target renders these via stem_parse).
     def process_inline(target, attrs = {})
       parent = Asciidoctor.load("x\n", safe: :safe).blocks.first
-      Metanorma::Asciichem::Extension::ChemInlineMacro.new
-                                                      .process(parent, target, attrs)
+      Metanorma::Plugin::Asciichem::Extension::ChemInlineMacro.new
+                                                              .process(parent, target, attrs)
     end
 
     it 'renders the target form into an asciimath inline node' do

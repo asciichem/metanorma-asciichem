@@ -32,3 +32,17 @@ All notable changes to this project will be documented in this file.
   InChIKey, appended as a `[bibliography]` section.
 - `:asciichem-cache-dir:` document attribute for offline,
   reproducible citation resolution.
+
+## [0.1.0-renamed] - 2026-09-17
+### Renamed
+
+- The gem moves to the metanorma org as
+  `metanorma-plugin-asciichem` (from asciichem/metanorma-asciichem),
+  following the plugin-family convention (lutaml, glossarist,
+  plantuml). Namespace is now `Metanorma::Plugin::Asciichem` with
+  lib at `metanorma/plugin/asciichem`; the require-by-name entry is
+  `metanorma-plugin-asciichem`. Per the plugin contract the gem no
+  longer self-registers with Asciidoctor — metanorma-standoc
+  requires and registers it (as it does for lutaml/glossarist).
+  Not released under the previous name, so the rename is invisible
+  to users.

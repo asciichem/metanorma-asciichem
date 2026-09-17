@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative 'lib/metanorma/asciichem/version'
+require_relative 'lib/metanorma/plugin/asciichem/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'metanorma-asciichem'
-  spec.version       = Metanorma::Asciichem::VERSION
+  spec.name          = 'metanorma-plugin-asciichem'
+  spec.version       = Metanorma::Plugin::Asciichem::VERSION
   spec.authors       = ['Ribose Inc.']
   spec.email         = ['open.source@ribose.com']
 
@@ -21,8 +21,8 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = Gem::Requirement.new('>= 3.3.0')
 
   spec.metadata['homepage_uri'] = spec.homepage
-  spec.metadata['source_code_uri'] = 'https://github.com/asciichem/metanorma-asciichem'
-  spec.metadata['changelog_uri'] = 'https://github.com/asciichem/metanorma-asciichem/blob/main/CHANGELOG.md'
+  spec.metadata['source_code_uri'] = 'https://github.com/metanorma/metanorma-plugin-asciichem'
+  spec.metadata['changelog_uri'] = 'https://github.com/metanorma/metanorma-plugin-asciichem/blob/main/CHANGELOG.md'
   spec.metadata['docs_uri'] = 'https://www.asciichem.org'
   spec.metadata['rubygems_mfa_required'] = 'true'
 
@@ -38,8 +38,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'nokogiri', '~> 1.16'
 
   # metanorma-standoc lives in the Gemfile dev group: it is the
-  # integration-test backend (spec/metanorma/asciichem/standoc_spec.rb),
-  # not a runtime requirement. asciichem >= 0.29.2 widened its
-  # relaton-bib constraint to < 3, which is what lets the two
-  # co-resolve in one bundle.
+  # integration-test backend (spec/metanorma/plugin/asciichem/
+  # standoc_spec.rb), not a runtime requirement — following the
+  # plugin contract, metanorma-standoc requires and registers this
+  # gem, like it does for metanorma-plugin-lutaml.
 end

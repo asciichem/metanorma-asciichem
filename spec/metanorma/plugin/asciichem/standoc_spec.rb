@@ -15,7 +15,7 @@ RSpec.describe 'metanorma-standoc compile', :standoc do
     require 'metanorma/standoc'
     require 'metanorma/converter/converter'
 
-    fixture = File.read(File.expand_path('../../fixtures/pubchem-aspirin.json', __dir__))
+    fixture = File.read(File.expand_path('../../../fixtures/pubchem-aspirin.json', __dir__))
     fetcher = Struct.new(:body) do
       def get(_url) = body
     end.new(fixture)

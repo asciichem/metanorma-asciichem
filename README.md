@@ -1,4 +1,4 @@
-# metanorma-asciichem
+# metanorma-plugin-asciichem
 
 [AsciiChem](https://www.asciichem.org) chemistry for
 [Metanorma](https://www.metanorma.org) documents: `[chem]` blocks and
@@ -10,15 +10,23 @@ collected automatically into the document bibliography.
 ## Installation
 
 ```sh
-gem install metanorma-asciichem
+gem install metanorma-plugin-asciichem
 ```
 
-metanorma-cli auto-requires gems named `metanorma-*`, so installing
-the gem activates the extension for every Metanorma compile (the
-flavour-gem contract). Outside metanorma-cli, register manually:
+The plugin follows the lutaml/glossarist contract: it exposes the
+extension classes and does not register them itself — the host
+does. [metanorma-standoc](https://github.com/metanorma/metanorma-standoc)
+requires and registers this gem (see its converter), so with the
+gem installed, `[chem]` and `chem:[]` are active in every Metanorma
+compile. Outside Metanorma, register manually:
 
 ```ruby
-require "metanorma/asciichem"
+require "metanorma-plugin-asciichem"
+
+Asciidoctor::Extensions.register do
+  treeprocessor Metanorma::Plugin::Asciichem::Extension::ChemTreeprocessor
+  inline_macro Metanorma::Plugin::Asciichem::Extension::ChemInlineMacro, :chem
+end
 ```
 
 ## Usage
@@ -108,7 +116,7 @@ Runtime dependencies are `asciichem` (>= 0.29.2), `asciidoctor`, and
 needs no Metanorma gem to run.
 
 The full metanorma-standoc compile is exercised by the suite:
-`spec/metanorma/asciichem/standoc_spec.rb` compiles a document
+`spec/metanorma/plugin/asciichem/standoc_spec.rb` compiles a document
 through metanorma-standoc (dev dependency) and asserts the semantic
 XML — `[chem]` → `<formula><stem type="MathML">`, bibitems verbatim
 inside `<references normative="false">` via the
