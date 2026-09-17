@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Version to release (must match lib/metanorma/asciichem/version.rb)"
+        description: "Version to release (must match lib/metanorma/plugin/asciichem/version.rb)"
         required: true
         type: string
 
@@ -12,7 +12,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     # Trusted publishing (OIDC): register the publisher on RubyGems.org
-    # as repository asciichem/metanorma-asciichem + workflow
+    # as repository metanorma/metanorma-plugin-asciichem + workflow
     # release.yml, with no environment — so this job must not claim
     # one.
     permissions:
@@ -25,7 +25,7 @@ jobs:
           persist-credentials: false
       - name: Verify version matches input
         run: |
-          actual=$(ruby -e 'require "./lib/metanorma/asciichem/version"; print Metanorma::Asciichem::VERSION')
+          actual=$(ruby -e 'require "./lib/metanorma/plugin/asciichem/version"; print Metanorma::Plugin::Asciichem::VERSION')
           if [ "$actual" != "${{ inputs.version }}" ]; then
             echo "Version mismatch: input=${{ inputs.version }}, version.rb=$actual"
             exit 1

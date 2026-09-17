@@ -12,12 +12,12 @@ CitationFetcher = Struct.new(:pubchem, :common_chemistry, keyword_init: true) do
   end
 end
 
-RSpec.describe Metanorma::Asciichem::Citations do
+RSpec.describe Metanorma::Plugin::Asciichem::Citations do
   let(:fixture) do
-    File.read(File.expand_path('../../fixtures/pubchem-aspirin.json', __dir__))
+    File.read(File.expand_path('../../../fixtures/pubchem-aspirin.json', __dir__))
   end
   let(:cc_fixture) do
-    File.read(File.expand_path('../../fixtures/common-chemistry-aspirin.json', __dir__))
+    File.read(File.expand_path('../../../fixtures/common-chemistry-aspirin.json', __dir__))
   end
 
   let(:fetch) do

@@ -18,3 +18,9 @@ Metrics/BlockLength:
   Exclude:
     - "spec/**/*"
     - "*.gemspec"
+
+# Gem-name entry file (require "metanorma-plugin-asciichem"), the
+# plugin-family convention (metanorma-plugin-lutaml does the same).
+Naming/FileName:
+  Exclude:
+    - "lib/metanorma-plugin-asciichem.rb"
